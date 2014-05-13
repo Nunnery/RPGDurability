@@ -1,0 +1,7 @@
+main: me.faceguy.RPGDurability.RPGDurabilityPlugin
+name: RPGDurability
+version: 1.0.0
+author: Faceguy
+
+commands:
+  repair:
