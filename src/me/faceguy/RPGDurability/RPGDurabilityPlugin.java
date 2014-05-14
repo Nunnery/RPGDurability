@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -94,8 +95,8 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
                 itemStack.setAmount(newAmount);
             }
             if (newDurability >= maxDurability) {
-                player.sendMessage(ChatColor.YELLOW + "Your " + ChatColor.WHITE + getItemName(itemStack) + ChatColor
-                        .YELLOW + " has broken!");
+                player.sendMessage(ChatColor.RED + "Your " + ChatColor.WHITE + getItemName(itemStack) + ChatColor
+                        .RED + " has broken!");
             } else {
                 itemStack.setDurability(newDurability);
                 keeps.add(itemStack);
@@ -113,8 +114,8 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
             short curDurability = itemStack.getDurability();
             short newDurability = (short) (curDurability + Math.round(damagePercentage * maxDurability));
             if (newDurability >= maxDurability) {
-                player.sendMessage(ChatColor.YELLOW + "Your " + ChatColor.WHITE + getItemName(itemStack) + ChatColor
-                        .YELLOW + " has broken!");
+                player.sendMessage(ChatColor.RED + "Your " + ChatColor.WHITE + getItemName(itemStack) + ChatColor
+                        .RED + " has broken!");
             } else {
                 itemStack.setDurability(newDurability);
                 keeps.add(itemStack);
