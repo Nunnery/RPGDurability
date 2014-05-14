@@ -181,13 +181,15 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
             }
             if (amount > 1) {
                 itemStack.setAmount(newAmount);
-            }
-            if (newDurability >= maxDurability) {
-                player.sendMessage(ChatColor.RED + "Your " + ChatColor.WHITE + getItemName(itemStack) + ChatColor
-                        .RED + " has broken!");
-            } else {
-                itemStack.setDurability(newDurability);
                 keeps.add(itemStack);
+            } else {
+                if (newDurability >= maxDurability) {
+                    player.sendMessage(ChatColor.RED + "Your " + ChatColor.WHITE + getItemName(itemStack) + ChatColor
+                            .RED + " has been destroyed!");
+                } else {
+                    itemStack.setDurability(newDurability);
+                    keeps.add(itemStack);
+                }
             }
         }
         // I intentionally didn't make it so that it autoputs armor back
