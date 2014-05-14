@@ -49,7 +49,7 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
         saveConfig();
     }
 
-    // SO INEFFICIENT ITS PAINFUL!
+    // SO INEFFICIENT ITS PAINFUL YO!
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event)
     {
