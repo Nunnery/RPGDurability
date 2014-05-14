@@ -3,6 +3,9 @@ package me.faceguy.RPGDurability;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -44,6 +47,91 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
         getConfig().set("damage-amount", damagePercentage);
         getConfig().set("amount-to-keep", amountToKeep);
         saveConfig();
+    }
+
+    // SO INEFFICIENT ITS PAINFUL!
+    @EventHandler
+    public void onHit(EntityDamageByEntityEvent event)
+    {
+        if(event.getEntity() == null)
+            return;
+
+        if(!(event.getEntity() instanceof LivingEntity))
+            return;
+
+        if(event.getEntityType() == EntityType.PLAYER)
+        {
+            PlayerInventory inv = ((Player)event.getEntity()).getInventory();
+            final String name = ((Player)event.getEntity()).getName();
+
+            final Short arr[] = new Short[4];
+            if(inv.getHelmet() != null)
+                arr[0] = inv.getHelmet().getDurability();
+            if(inv.getChestplate() != null)
+                arr[1] = inv.getChestplate().getDurability();
+            if(inv.getLeggings() != null)
+                arr[2] = inv.getLeggings().getDurability();
+            if(inv.getBoots() != null)
+                arr[3] = inv.getBoots().getDurability();
+
+            getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable()
+            {
+                public void run()
+                {
+                    Player pa = getServer().getPlayerExact(name);
+                    if(pa != null)
+                    {
+                        PlayerInventory inv2 = pa.getInventory();
+                        if(inv2 != null)
+                        {
+                            if(inv2.getHelmet() != null)
+                                inv2.getHelmet().setDurability(arr[0]);
+                            if(inv2.getChestplate() != null)
+                                inv2.getChestplate().setDurability(arr[1]);
+                            if(inv2.getLeggings() != null)
+                                inv2.getLeggings().setDurability(arr[2]);
+                            if(inv2.getBoots() != null)
+                                inv2.getBoots().setDurability(arr[3]);
+                        }
+                    }
+                }
+            }, 1L);
+        }
+
+        if(event.getDamager() == null)
+            return;
+
+        if(event.getDamager().getType() != EntityType.PLAYER)
+            return;
+
+        if(event.getDamager() instanceof Player)
+        {
+            Player p = (Player)event.getDamager();
+            if(p.getItemInHand() != null)
+            {
+                ItemStack stack = p.getItemInHand();
+                if(stack.getType() == Material.WOOD_AXE || stack.getType() == Material.STONE_AXE || stack.getType() == Material.IRON_AXE ||stack.getType() == Material.GOLD_AXE || stack.getType() == Material.DIAMOND_AXE || stack.getType() == Material.DIAMOND_SWORD || stack.getType() == Material.GOLD_SWORD || stack.getType() == Material.IRON_SWORD || stack.getType() == Material.STONE_SWORD || stack.getType() == Material.WOOD_SWORD)
+                {
+                    final short prevDura = stack.getDurability();
+                    final String name = p.getName();
+                    getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable()
+                    {
+                        public void run()
+                        {
+                            Player pa = getServer().getPlayerExact(name);
+                            if(pa != null)
+                            {
+                                PlayerInventory inv2 = pa.getInventory();
+                                if(inv2.getItemInHand() != null)
+                                {
+                                    inv2.getItemInHand().setDurability(prevDura);
+                                }
+                            }
+                        }
+                    }, 1L);
+                }
+            }
+        }
     }
 
     @EventHandler
