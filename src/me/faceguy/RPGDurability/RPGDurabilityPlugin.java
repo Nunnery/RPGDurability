@@ -176,10 +176,13 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
 
             int amount = itemStack.getAmount();
             int newAmount = (int) (amountToKeep * amount);
+            int droppedAmount = (int) (amount - newAmount);
             if (newAmount < 0 && amount > 1) {
                 continue;
             }
             if (amount > 1) {
+                itemStack.setAmount(droppedAmount);
+                drops.add(itemStack);
                 itemStack.setAmount(newAmount);
                 keeps.add(itemStack);
             } else {
