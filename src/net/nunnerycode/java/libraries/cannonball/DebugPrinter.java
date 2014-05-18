@@ -74,6 +74,10 @@ public class DebugPrinter {
         }
     }
 
+    public void debug(String... messages) {
+        debug(Level.INFO, messages);
+    }
+
     public File getDebugFolder() {
         return debugFolder;
     }
