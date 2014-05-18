@@ -142,10 +142,10 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
             return;
         }
         List<ItemStack> itemStacks = items.get(id);
-        items.remove(id);
         for (ItemStack itemStack : itemStacks) {
             player.getInventory().addItem(itemStack);
         }
+        items.remove(id);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
