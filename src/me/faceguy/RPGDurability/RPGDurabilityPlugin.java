@@ -149,6 +149,7 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
         }
         List<ItemStack> itemStacks = items.get(id);
         for (ItemStack itemStack : itemStacks) {
+            debugPrinter.debug("Adding " + itemStack.getType().name() + " to " + player.getName());
             player.getInventory().addItem(itemStack);
         }
         items.remove(id);
@@ -211,13 +212,16 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
             if (itemStack == null) {
                 continue;
             }
+            debugPrinter.debug("Checking " + itemStack.getType().name());
             short maxDurability = itemStack.getType().getMaxDurability();
             short curDurability = itemStack.getDurability();
             short newDurability = (short) (curDurability + Math.round(damagePercentage * maxDurability));
             if (newDurability >= maxDurability) {
+                debugPrinter.debug("Item has broken!");
                 player.sendMessage(ChatColor.RED + "Your " + ChatColor.WHITE + getItemName(itemStack) + ChatColor
                         .RED + " has broken!");
             } else {
+                debugPrinter.debug("Keeping item");
                 itemStack.setDurability(newDurability);
                 keeps.add(itemStack);
             }
