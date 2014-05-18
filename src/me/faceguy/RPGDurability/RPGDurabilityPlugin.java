@@ -31,6 +31,13 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
     private Map<UUID, List<ItemStack>> items;
 
     @Override
+    public void onDisable() {
+        getConfig().set("damage-amount", damagePercentage);
+        getConfig().set("amount-to-keep", amountToKeep);
+        saveConfig();
+    }
+
+    @Override
     public void onEnable() {
         items = new HashMap<>();
         Bukkit.getPluginManager().registerEvents(this, this);
@@ -42,88 +49,84 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
         amountToKeep = getConfig().getDouble("amount-to-keep", 0.25);
     }
 
-    @Override
-    public void onDisable() {
-        getConfig().set("damage-amount", damagePercentage);
-        getConfig().set("amount-to-keep", amountToKeep);
-        saveConfig();
-    }
-
     // SO INEFFICIENT ITS PAINFUL YO!
     @EventHandler
-    public void onHit(EntityDamageByEntityEvent event)
-    {
-        if(event.getEntity() == null)
+    public void onHit(EntityDamageByEntityEvent event) {
+        if (event.getEntity() == null) {
             return;
+        }
 
-        if(!(event.getEntity() instanceof LivingEntity))
+        if (!(event.getEntity() instanceof LivingEntity)) {
             return;
+        }
 
-        if(event.getEntityType() == EntityType.PLAYER)
-        {
-            PlayerInventory inv = ((Player)event.getEntity()).getInventory();
-            final String name = ((Player)event.getEntity()).getName();
+        if (event.getEntityType() == EntityType.PLAYER) {
+            PlayerInventory inv = ((Player) event.getEntity()).getInventory();
+            final String name = ((Player) event.getEntity()).getName();
 
             final Short arr[] = new Short[4];
-            if(inv.getHelmet() != null)
+            if (inv.getHelmet() != null) {
                 arr[0] = inv.getHelmet().getDurability();
-            if(inv.getChestplate() != null)
+            }
+            if (inv.getChestplate() != null) {
                 arr[1] = inv.getChestplate().getDurability();
-            if(inv.getLeggings() != null)
+            }
+            if (inv.getLeggings() != null) {
                 arr[2] = inv.getLeggings().getDurability();
-            if(inv.getBoots() != null)
+            }
+            if (inv.getBoots() != null) {
                 arr[3] = inv.getBoots().getDurability();
+            }
 
-            getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable()
-            {
-                public void run()
-                {
+            getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+                public void run() {
                     Player pa = getServer().getPlayerExact(name);
-                    if(pa != null)
-                    {
+                    if (pa != null) {
                         PlayerInventory inv2 = pa.getInventory();
-                        if(inv2 != null)
-                        {
-                            if(inv2.getHelmet() != null)
+                        if (inv2 != null) {
+                            if (inv2.getHelmet() != null) {
                                 inv2.getHelmet().setDurability(arr[0]);
-                            if(inv2.getChestplate() != null)
+                            }
+                            if (inv2.getChestplate() != null) {
                                 inv2.getChestplate().setDurability(arr[1]);
-                            if(inv2.getLeggings() != null)
+                            }
+                            if (inv2.getLeggings() != null) {
                                 inv2.getLeggings().setDurability(arr[2]);
-                            if(inv2.getBoots() != null)
+                            }
+                            if (inv2.getBoots() != null) {
                                 inv2.getBoots().setDurability(arr[3]);
+                            }
                         }
                     }
                 }
             }, 1L);
         }
 
-        if(event.getDamager() == null)
+        if (event.getDamager() == null) {
             return;
+        }
 
-        if(event.getDamager().getType() != EntityType.PLAYER)
+        if (event.getDamager().getType() != EntityType.PLAYER) {
             return;
+        }
 
-        if(event.getDamager() instanceof Player)
-        {
-            Player p = (Player)event.getDamager();
-            if(p.getItemInHand() != null)
-            {
+        if (event.getDamager() instanceof Player) {
+            Player p = (Player) event.getDamager();
+            if (p.getItemInHand() != null) {
                 ItemStack stack = p.getItemInHand();
-                if(stack.getType() == Material.WOOD_AXE || stack.getType() == Material.STONE_AXE || stack.getType() == Material.IRON_AXE ||stack.getType() == Material.GOLD_AXE || stack.getType() == Material.DIAMOND_AXE || stack.getType() == Material.DIAMOND_SWORD || stack.getType() == Material.GOLD_SWORD || stack.getType() == Material.IRON_SWORD || stack.getType() == Material.STONE_SWORD || stack.getType() == Material.WOOD_SWORD)
-                {
+                if (stack.getType() == Material.WOOD_AXE || stack.getType() == Material.STONE_AXE ||
+                    stack.getType() == Material.IRON_AXE || stack.getType() == Material.GOLD_AXE ||
+                    stack.getType() == Material.DIAMOND_AXE || stack.getType() == Material.DIAMOND_SWORD ||
+                    stack.getType() == Material.GOLD_SWORD || stack.getType() == Material.IRON_SWORD ||
+                    stack.getType() == Material.STONE_SWORD || stack.getType() == Material.WOOD_SWORD) {
                     final short prevDura = stack.getDurability();
                     final String name = p.getName();
-                    getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable()
-                    {
-                        public void run()
-                        {
+                    getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+                        public void run() {
                             Player pa = getServer().getPlayerExact(name);
-                            if(pa != null)
-                            {
+                            if (pa != null) {
                                 PlayerInventory inv2 = pa.getInventory();
-                                if(inv2.getItemInHand() != null)
-                                {
+                                if (inv2.getItemInHand() != null) {
                                     inv2.getItemInHand().setDurability(prevDura);
                                 }
                             }
