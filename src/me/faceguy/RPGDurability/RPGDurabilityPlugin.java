@@ -1,6 +1,7 @@
 // This is ToppleTheNun's version of the class
 package me.faceguy.RPGDurability;
 
+import net.nunnerycode.java.libraries.cannonball.DebugPrinter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -29,6 +30,7 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
     private double damagePercentage;
     private double amountToKeep;
     private Map<UUID, List<ItemStack>> items;
+    private DebugPrinter debugPrinter;
 
     @Override
     public void onDisable() {
@@ -47,6 +49,7 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
         }
         damagePercentage = getConfig().getDouble("damage-amount", 0.25);
         amountToKeep = getConfig().getDouble("amount-to-keep", 0.25);
+        debugPrinter = new DebugPrinter(getDataFolder().getPath(), "debug.log");
     }
 
     // SO INEFFICIENT ITS PAINFUL YO!
