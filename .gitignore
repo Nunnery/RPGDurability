@@ -8,3 +8,5 @@
 .project
 /.idea
 /.settings
+/build
+/dist
