@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
 
 public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
 
@@ -150,7 +149,6 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
         }
         List<ItemStack> itemStacks = items.get(id);
         for (ItemStack itemStack : itemStacks) {
-            debugPrinter.debug(Level.INFO, "Adding " + itemStack.getType().name() + " to " + player.getName());
             player.getInventory().addItem(itemStack);
         }
         items.remove(id);
@@ -213,16 +211,13 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
             if (itemStack == null || itemStack.getType() == Material.AIR) {
                 continue;
             }
-            debugPrinter.debug(Level.INFO, "Checking " + itemStack.getType().name());
             short maxDurability = itemStack.getType().getMaxDurability();
             short curDurability = itemStack.getDurability();
             short newDurability = (short) (curDurability + Math.round(damagePercentage * maxDurability));
             if (newDurability >= maxDurability) {
-                debugPrinter.debug(Level.INFO, "Item has broken!");
                 player.sendMessage(ChatColor.RED + "Your " + ChatColor.WHITE + getItemName(itemStack) + ChatColor
                         .RED + " has broken!");
             } else {
-                debugPrinter.debug(Level.INFO, "Keeping item");
                 itemStack.setDurability(newDurability);
                 keeps.add(itemStack);
             }
