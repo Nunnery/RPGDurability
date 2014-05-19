@@ -168,7 +168,7 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
         event.getDrops().clear();
         for (int i = 0; i < playerInventory.getSize(); i++) {
             ItemStack itemStack = playerInventory.getItem(i);
-            if (itemStack == null) {
+            if (itemStack == null || itemStack.getType() == Material.AIR) {
                 continue;
             }
             // if the index is greater than 8, then it's in the main part of the inventory
@@ -210,7 +210,7 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
         // All you need to do is make another HashMap to track the things from here
         // and then in the respawn, add the armor pieces into their respective spots.
         for (ItemStack itemStack : playerInventory.getArmorContents()) {
-            if (itemStack == null) {
+            if (itemStack == null || itemStack.getType() == Material.AIR) {
                 continue;
             }
             debugPrinter.debug(Level.INFO, "Checking " + itemStack.getType().name());
