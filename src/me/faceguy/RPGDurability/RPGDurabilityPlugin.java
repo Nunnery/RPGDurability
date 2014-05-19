@@ -218,7 +218,7 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
             short curDurability = itemStack.getDurability();
             short newDurability = (short) (curDurability + Math.round(damagePercentage * maxDurability));
             if (newDurability >= maxDurability) {
-                debugPrinter.debug("Item has broken!");
+                debugPrinter.debug(Level.INFO, "Item has broken!");
                 player.sendMessage(ChatColor.RED + "Your " + ChatColor.WHITE + getItemName(itemStack) + ChatColor
                         .RED + " has broken!");
             } else {
