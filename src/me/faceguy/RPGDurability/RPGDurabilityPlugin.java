@@ -209,7 +209,7 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
         // since that's relatively simple with the basis I've set here.
         // All you need to do is make another HashMap to track the things from here
         // and then in the respawn, add the armor pieces into their respective spots.
-        for (ItemStack itemStack : playerInventory.getArmorContents()) {
+        for (ItemStack itemStack : player.getEquipment().getArmorContents()) {
             if (itemStack == null || itemStack.getType() == Material.AIR) {
                 continue;
             }
