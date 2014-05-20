@@ -154,7 +154,7 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
         items.remove(id);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerDeathEvent(PlayerDeathEvent event) {
         // players keep all armor
         // players lose 75% of itemstack, keep 25%
