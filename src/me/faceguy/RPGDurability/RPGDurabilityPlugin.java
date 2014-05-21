@@ -232,7 +232,9 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
             }
         }
 
-        items.put(player.getUniqueId(), keeps);
+        if (!items.containsKey(player.getUniqueId())) {
+            items.put(player.getUniqueId(), keeps);
+        }
         for (ItemStack itemStack : drops) {
             player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
         }
