@@ -151,12 +151,7 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
         for (ItemStack itemStack : itemStacks) {
             player.getInventory().addItem(itemStack);
         }
-        Bukkit.getScheduler().runTaskLater(this, new Runnable() {
-            @Override
-            public void run() {
-                items.remove(id);
-            }
-        }, 20L * 2);
+        items.remove(id);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -165,6 +160,9 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
         // players lose 75% of itemstack, keep 25%
         // itemstack gets durability damage
         Player player = event.getEntity();
+        if (items.containsKey(player.getUniqueId())) {
+            return;
+        }
         PlayerInventory playerInventory = player.getInventory();
         List<ItemStack> drops = new ArrayList<>();
         List<ItemStack> keeps = new ArrayList<>();
@@ -232,9 +230,7 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
             }
         }
 
-        if (!items.containsKey(player.getUniqueId())) {
-            items.put(player.getUniqueId(), keeps);
-        }
+        items.put(player.getUniqueId(), keeps);
         for (ItemStack itemStack : drops) {
             player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
         }
