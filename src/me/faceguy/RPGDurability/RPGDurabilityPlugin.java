@@ -161,11 +161,15 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
         // itemstack gets durability damage
         Player player = event.getEntity();
         PlayerInventory playerInventory = player.getInventory();
+        int nullChecker =0;
         for (int i = 0; i < playerInventory.getSize(); i++) {
             ItemStack doubleDeathChecker = playerInventory.getItem(i);
-            if (doubleDeathChecker != null && doubleDeathChecker.getType() != Material.AIR) {
-                continue;
+            if (doubleDeathChecker == null || doubleDeathChecker.getType() == Material.AIR) {
+                nullChecker++;
             }
+        }
+        if (nullChecker >= playerInventory.getSize()) {
+            return;
         }
         List<ItemStack> drops = new ArrayList<>();
         List<ItemStack> keeps = new ArrayList<>();
