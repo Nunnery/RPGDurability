@@ -191,14 +191,11 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
             if (newAmount < 0 && amount > 1) {
                 continue;
             }
-            if (amount > 1) {
-                itemStack.setAmount(droppedAmount);
-                ItemStack dropItemStack = itemStack.clone();
-                dropItemStack.setAmount(Math.max(droppedAmount, 1));
-                drops.add(dropItemStack);
-                itemStack.setAmount(newAmount);
-                keeps.add(itemStack);
-            } else {
+            if (itemStack.getType() == Material.WOOD_AXE || itemStack.getType() == Material.STONE_AXE ||
+                    itemStack.getType() == Material.IRON_AXE || itemStack.getType() == Material.GOLD_AXE ||
+                    itemStack.getType() == Material.DIAMOND_AXE || itemStack.getType() == Material.DIAMOND_SWORD ||
+                    itemStack.getType() == Material.GOLD_SWORD || itemStack.getType() == Material.IRON_SWORD ||
+                    itemStack.getType() == Material.STONE_SWORD || itemStack.getType() == Material.WOOD_SWORD) {
                 if (newDurability >= maxDurability) {
                     player.sendMessage(ChatColor.RED + "Your " + ChatColor.WHITE + getItemName(itemStack) + ChatColor
                             .RED + " has been destroyed!");
@@ -206,6 +203,13 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
                     itemStack.setDurability(newDurability);
                     keeps.add(itemStack);
                 }
+            } else {
+                itemStack.setAmount(droppedAmount);
+                ItemStack dropItemStack = itemStack.clone();
+                dropItemStack.setAmount(Math.max(droppedAmount, 1));
+                drops.add(dropItemStack);
+                itemStack.setAmount(newAmount);
+                keeps.add(itemStack);
             }
         }
         // I intentionally didn't make it so that it autoputs armor back
