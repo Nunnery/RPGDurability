@@ -148,7 +148,8 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
             return;
         }
         List<ItemStack> itemStacks = items.get(id);
-        for (ItemStack itemStack : itemStacks) {
+        for (int i = 0; i < itemStacks.size(); i++) {
+            ItemStack itemStack = itemStacks.get(i);
             player.getInventory().addItem(itemStack);
         }
         items.remove(id);
@@ -186,9 +187,6 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
             int amount = itemStack.getAmount();
             int newAmount = (int) (amountToKeep * amount);
             int droppedAmount = amount - newAmount;
-            if (newAmount < 0 && amount > 1) {
-                continue;
-            }
             if (itemStack.getType() == Material.WOOD_AXE || itemStack.getType() == Material.STONE_AXE ||
                     itemStack.getType() == Material.IRON_AXE || itemStack.getType() == Material.GOLD_AXE ||
                     itemStack.getType() == Material.DIAMOND_AXE || itemStack.getType() == Material.DIAMOND_SWORD ||
@@ -198,16 +196,20 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
                     player.sendMessage(ChatColor.RED + "Your " + ChatColor.WHITE + getItemName(itemStack) + ChatColor
                             .RED + " has been destroyed!");
                 } else {
-                    itemStack.setDurability(newDurability);
-                    keeps.add(itemStack);
+                    ItemStack keepItemStack = itemStack.clone();
+                    keepItemStack.setDurability(newDurability);
+                    keeps.add(keepItemStack);
                 }
             } else {
-                itemStack.setAmount(droppedAmount);
+                if (newAmount < 1) {
+                    continue;
+                }
                 ItemStack dropItemStack = itemStack.clone();
+                ItemStack keepItemStack = itemStack.clone();
                 dropItemStack.setAmount(Math.max(droppedAmount, 1));
+                keepItemStack.setAmount(Math.max(newAmount, 1));
                 drops.add(dropItemStack);
-                itemStack.setAmount(newAmount);
-                keeps.add(itemStack);
+                keeps.add(keepItemStack);
             }
         }
         // I intentionally didn't make it so that it autoputs armor back
@@ -225,8 +227,9 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
                 player.sendMessage(ChatColor.RED + "Your " + ChatColor.WHITE + getItemName(itemStack) + ChatColor
                         .RED + " has broken!");
             } else {
-                itemStack.setDurability(newDurability);
-                keeps.add(itemStack);
+                ItemStack keepItemStack = itemStack.clone();
+                keepItemStack.setDurability(newDurability);
+                keeps.add(keepItemStack);
             }
         }
 
