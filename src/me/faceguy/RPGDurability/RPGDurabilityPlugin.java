@@ -143,13 +143,12 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        final UUID id = player.getUniqueId();
+        UUID id = player.getUniqueId();
         if (!items.containsKey(id)) {
             return;
         }
         List<ItemStack> itemStacks = items.get(id);
-        for (int i = 0; i < itemStacks.size(); i++) {
-            ItemStack itemStack = itemStacks.get(i);
+        for (ItemStack itemStack : itemStacks) {
             player.getInventory().addItem(itemStack);
         }
         items.remove(id);
@@ -161,9 +160,6 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
         // players lose 75% of itemstack, keep 25%
         // itemstack gets durability damage
         Player player = event.getEntity();
-        if (items.containsKey(player.getUniqueId())) {
-            return;
-        }
         PlayerInventory playerInventory = player.getInventory();
         List<ItemStack> drops = new ArrayList<>();
         List<ItemStack> keeps = new ArrayList<>();
@@ -187,29 +183,24 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
             int amount = itemStack.getAmount();
             int newAmount = (int) (amountToKeep * amount);
             int droppedAmount = amount - newAmount;
-            if (itemStack.getType() == Material.WOOD_AXE || itemStack.getType() == Material.STONE_AXE ||
-                    itemStack.getType() == Material.IRON_AXE || itemStack.getType() == Material.GOLD_AXE ||
-                    itemStack.getType() == Material.DIAMOND_AXE || itemStack.getType() == Material.DIAMOND_SWORD ||
-                    itemStack.getType() == Material.GOLD_SWORD || itemStack.getType() == Material.IRON_SWORD ||
-                    itemStack.getType() == Material.STONE_SWORD || itemStack.getType() == Material.WOOD_SWORD) {
+            if (newAmount < 0 && amount > 1) {
+                continue;
+            }
+            if (amount > 1) {
+                itemStack.setAmount(droppedAmount);
+                ItemStack dropItemStack = itemStack.clone();
+                dropItemStack.setAmount(Math.max(droppedAmount, 1));
+                drops.add(dropItemStack);
+                itemStack.setAmount(newAmount);
+                keeps.add(itemStack);
+            } else {
                 if (newDurability >= maxDurability) {
                     player.sendMessage(ChatColor.RED + "Your " + ChatColor.WHITE + getItemName(itemStack) + ChatColor
                             .RED + " has been destroyed!");
                 } else {
-                    ItemStack keepItemStack = itemStack.clone();
-                    keepItemStack.setDurability(newDurability);
-                    keeps.add(keepItemStack);
+                    itemStack.setDurability(newDurability);
+                    keeps.add(itemStack);
                 }
-            } else {
-                if (newAmount < 1) {
-                    continue;
-                }
-                ItemStack dropItemStack = itemStack.clone();
-                ItemStack keepItemStack = itemStack.clone();
-                dropItemStack.setAmount(Math.max(droppedAmount, 1));
-                keepItemStack.setAmount(Math.max(newAmount, 1));
-                drops.add(dropItemStack);
-                keeps.add(keepItemStack);
             }
         }
         // I intentionally didn't make it so that it autoputs armor back
@@ -227,9 +218,8 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
                 player.sendMessage(ChatColor.RED + "Your " + ChatColor.WHITE + getItemName(itemStack) + ChatColor
                         .RED + " has broken!");
             } else {
-                ItemStack keepItemStack = itemStack.clone();
-                keepItemStack.setDurability(newDurability);
-                keeps.add(keepItemStack);
+                itemStack.setDurability(newDurability);
+                keeps.add(itemStack);
             }
         }
 
