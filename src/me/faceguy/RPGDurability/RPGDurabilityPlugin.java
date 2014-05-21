@@ -143,7 +143,7 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        UUID id = player.getUniqueId();
+        final UUID id = player.getUniqueId();
         if (!items.containsKey(id)) {
             return;
         }
@@ -151,7 +151,12 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
         for (ItemStack itemStack : itemStacks) {
             player.getInventory().addItem(itemStack);
         }
-        items.remove(id);
+        Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+            @Override
+            public void run() {
+                items.remove(id);
+            }
+        }, 20L * 2);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
