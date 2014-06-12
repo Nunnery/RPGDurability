@@ -117,12 +117,13 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
             Player p = (Player) event.getDamager();
             if (p.getItemInHand() != null) {
                 ItemStack stack = p.getItemInHand();
+                final short prevDura = stack.getDurability();
                 if (stack.getType() == Material.WOOD_AXE || stack.getType() == Material.STONE_AXE ||
                     stack.getType() == Material.IRON_AXE || stack.getType() == Material.GOLD_AXE ||
                     stack.getType() == Material.DIAMOND_AXE || stack.getType() == Material.DIAMOND_SWORD ||
                     stack.getType() == Material.GOLD_SWORD || stack.getType() == Material.IRON_SWORD ||
-                    stack.getType() == Material.STONE_SWORD || stack.getType() == Material.WOOD_SWORD) {
-                    final short prevDura = stack.getDurability();
+                    stack.getType() == Material.STONE_SWORD || stack.getType() == Material.WOOD_SWORD ||
+                    stack.getType() == Material.BOW || stack.getType() == Material.FISHING_ROD) {
                     final String name = p.getName();
                     getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                         public void run() {
@@ -200,7 +201,8 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
                     itemStack.getType() == Material.IRON_AXE || itemStack.getType() == Material.GOLD_AXE ||
                     itemStack.getType() == Material.DIAMOND_AXE || itemStack.getType() == Material.DIAMOND_SWORD ||
                     itemStack.getType() == Material.GOLD_SWORD || itemStack.getType() == Material.IRON_SWORD ||
-                    itemStack.getType() == Material.STONE_SWORD || itemStack.getType() == Material.WOOD_SWORD) {
+                    itemStack.getType() == Material.STONE_SWORD || itemStack.getType() == Material.WOOD_SWORD ||
+                    itemStack.getType() == Material.BOW) {
                 if (newDurability >= maxDurability) {
                     player.sendMessage(ChatColor.RED + "Your " + ChatColor.WHITE + getItemName(itemStack) + ChatColor
                             .RED + " has been destroyed!");
