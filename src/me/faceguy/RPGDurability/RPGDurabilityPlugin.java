@@ -117,7 +117,6 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
             Player p = (Player) event.getDamager();
             if (p.getItemInHand() != null) {
                 ItemStack stack = p.getItemInHand();
-                final short prevDura = stack.getDurability();
                 if (stack.getType() == Material.WOOD_AXE || stack.getType() == Material.STONE_AXE ||
                     stack.getType() == Material.IRON_AXE || stack.getType() == Material.GOLD_AXE ||
                     stack.getType() == Material.DIAMOND_AXE || stack.getType() == Material.DIAMOND_SWORD ||
@@ -125,6 +124,7 @@ public class RPGDurabilityPlugin extends JavaPlugin implements Listener {
                     stack.getType() == Material.STONE_SWORD || stack.getType() == Material.WOOD_SWORD ||
                     stack.getType() == Material.BOW || stack.getType() == Material.FISHING_ROD) {
                     final String name = p.getName();
+                    final short prevDura = stack.getDurability();
                     getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                         public void run() {
                             Player pa = getServer().getPlayerExact(name);
